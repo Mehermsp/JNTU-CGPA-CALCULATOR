@@ -3,7 +3,8 @@ import axios from 'axios';
 
 const AuthContext = createContext(null);
 
-const API = axios.create({ baseURL: '/api' });
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '/api';
+const API = axios.create({ baseURL: API_BASE_URL });
 
 API.interceptors.request.use(config => {
   const token = localStorage.getItem('jntu_token');
