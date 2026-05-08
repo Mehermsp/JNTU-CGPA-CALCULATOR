@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const AuthContext = createContext(null);
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '/api';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://jntu-cgpa-calculator.onrender.com';
 const API = axios.create({ baseURL: API_BASE_URL });
 
 API.interceptors.request.use(config => {
