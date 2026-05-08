@@ -14,6 +14,9 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Prevent noisy 404s when browsers request favicon from API host
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/semesters', semesterRoutes);
