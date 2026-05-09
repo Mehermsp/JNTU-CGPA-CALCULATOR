@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import SiteFooter from '../components/SiteFooter';
+import { BRANCH_OPTIONS } from '../utils/branchSubjects';
 
 export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '', rollNumber: '', branch: '', regulation: 'R20' });
@@ -20,8 +21,6 @@ export default function Register() {
       setError(err.response?.data?.error || 'Registration failed');
     } finally { setLoading(false); }
   };
-
-  const branches = ['CSE', 'IT', 'ECE', 'EEE', 'MECH', 'CIVIL', 'CHEM', 'AIDS', 'AIML', 'DS', 'CS', 'Other'];
 
   return (
     <div className="auth-page">
@@ -61,7 +60,7 @@ export default function Register() {
                 <label>Branch</label>
                 <select value={form.branch} onChange={e => setForm({...form, branch: e.target.value})}>
                   <option value="">Select</option>
-                  {branches.map(b => <option key={b} value={b}>{b}</option>)}
+                  {BRANCH_OPTIONS.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
             </div>

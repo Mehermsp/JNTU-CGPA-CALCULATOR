@@ -171,4 +171,17 @@ router.delete('/:semName', auth, async (req, res) => {
   }
 });
 
+// Delete all semesters for current user
+router.delete('/', auth, async (req, res) => {
+  try {
+    const result = await Semester.deleteMany({ userId: req.userId });
+    res.json({
+      message: 'All semester data deleted successfully',
+      deletedCount: result.deletedCount || 0
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

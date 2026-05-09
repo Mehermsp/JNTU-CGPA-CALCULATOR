@@ -3,8 +3,10 @@ import axios from 'axios';
 
 const AuthContext = createContext(null);
 
-const API_HOST = (process.env.REACT_APP_API_BASE_URL || 'https://jntu-cgpa-calculator.onrender.com')
-  .replace(/\/+$/, '');
+const API_HOST = (
+    process.env.REACT_APP_API_BASE_URL ||
+    "https://jntu-cgpa-calculator.onrender.com"
+).replace(/\/+$/, "");
 const API_BASE_URL = API_HOST.endsWith('/api') ? API_HOST : `${API_HOST}/api`;
 const API = axios.create({ baseURL: API_BASE_URL });
 

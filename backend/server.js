@@ -8,10 +8,14 @@ const semesterRoutes = require('./routes/semesters');
 
 const app = express();
 
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'https://jntu-cgpa-calculator-1.onrender.com',
-  credentials: true
-}));
+app.use(
+    cors({
+        origin:
+            process.env.CLIENT_URL ||
+            "https://jntu-cgpa-calculator-1.onrender.com",
+        credentials: true,
+    })
+);
 app.use(express.json());
 
 // Prevent noisy 404s when browsers request favicon from API host

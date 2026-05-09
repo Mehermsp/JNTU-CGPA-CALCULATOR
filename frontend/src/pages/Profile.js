@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { API } from '../context/AuthContext';
+import { BRANCH_OPTIONS } from '../utils/branchSubjects';
 
 export default function Profile() {
   const { user, updateProfile, logout } = useAuth();
@@ -11,17 +13,32 @@ export default function Profile() {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
 
-  const branches = ['CSE', 'IT', 'ECE', 'EEE', 'MECH', 'CIVIL', 'CHEM', 'AIDS', 'AIML', 'DS', 'CS', 'Other'];
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true); setError(''); setSaved(false);
     try {
+      const branchChanged = user?.branch && user.branch !== form.branch;
+      if (branchChanged) {
+        const semRes = await API.get('/semesters');
+        const hasExistingSemesters = (semRes?.data?.semesters || []).length > 0;
+
+        if (hasExistingSemesters) {
+          const shouldChangeBranch = window.confirm(
+            'Do you want to change the branch? This will delete your existing semester details.'
+          );
+          if (!shouldChangeBranch) {
+            setSaving(false);
+            return;
+          }
+          await API.delete('/semesters');
+        }
+      }
+
       await updateProfile(form);
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch (e) {
-      setError('Update failed. Please try again.');
+      setError(e?.response?.data?.error || 'Update failed. Please try again.');
     } finally { setSaving(false); }
   };
 
@@ -66,7 +83,7 @@ export default function Profile() {
                 <label>Branch</label>
                 <select value={form.branch} onChange={e => setForm({...form, branch: e.target.value})}>
                   <option value="">Select</option>
-                  {branches.map(b => <option key={b} value={b}>{b}</option>)}
+                  {BRANCH_OPTIONS.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
             </div>
@@ -81,6 +98,9 @@ export default function Profile() {
             <button type="submit" className="btn btn-primary" disabled={saving}>
               {saving ? 'Saving...' : 'Save Changes'}
             </button>
+            <p style={{ color: 'var(--text-muted)', fontSize: 12, marginTop: 10 }}>
+              Branch selection controls semester subject defaults in the calculator.
+            </p>
           </form>
         </div>
 

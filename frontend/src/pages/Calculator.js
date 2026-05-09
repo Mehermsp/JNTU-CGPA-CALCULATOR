@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { API } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import {
   GRADES,
   SEMESTER_LIST,
@@ -10,6 +11,7 @@ import {
   getGradePoint,
   normalizeGrade
 } from '../utils/grades';
+import { getBranchSemesterSubjects } from '../utils/branchSubjects';
 
 function Toast({ msg, type, onClose }) {
   useEffect(() => { const t = setTimeout(onClose, 2500); return () => clearTimeout(t); }, [onClose]);
@@ -17,6 +19,7 @@ function Toast({ msg, type, onClose }) {
 }
 
 export default function Calculator() {
+  const { user } = useAuth();
   const [activeSem, setActiveSem] = useState('1-1');
   const [subjects, setSubjects] = useState([]);
   const [savedSems, setSavedSems] = useState({});
@@ -27,6 +30,12 @@ export default function Calculator() {
 
   const normalizeSubjects = (items = []) =>
     items.map(s => ({ ...s, grade: normalizeGrade(s.grade) }));
+
+  const getDefaultSubjects = useCallback((sem) => {
+    const branchDefaults = getBranchSemesterSubjects(user?.branch, sem);
+    const defaults = branchDefaults.length > 0 ? branchDefaults : (JNTUK_R20_SUBJECTS[sem] || []);
+    return defaults.map(s => ({ name: s.name, grade: 'A', credits: s.credits }));
+  }, [user?.branch]);
 
   const loadSavedData = useCallback(async () => {
     try {
@@ -39,14 +48,9 @@ export default function Calculator() {
     } catch (e) {
       setSubjects(getDefaultSubjects(activeSem));
     }
-  }, [activeSem]);
+  }, [activeSem, getDefaultSubjects]);
 
   useEffect(() => { loadSavedData(); }, [loadSavedData]);
-
-  const getDefaultSubjects = (sem) => {
-    const defaults = JNTUK_R20_SUBJECTS[sem] || [];
-    return defaults.map(s => ({ name: s.name, grade: 'A', credits: s.credits }));
-  };
 
   const switchSem = (sem) => {
     setActiveSem(sem);
