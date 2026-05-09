@@ -1136,16 +1136,20 @@ body {
 @media (max-width: 640px) {
     .calculator-page .table-scroll,
     .table-scroll {
-        overflow-x: visible;
+        overflow-x: hidden;
     }
+
     .calculator-page .subject-table,
     .sgpa-table-wrap .subject-table {
         min-width: 100%;
+        width: 100%;
     }
+
     .calculator-page .subject-table thead,
     .sgpa-table-wrap .subject-table thead {
         display: none;
     }
+
     .calculator-page .subject-table tbody,
     .calculator-page .subject-table tr,
     .calculator-page .subject-table td,
@@ -1155,48 +1159,81 @@ body {
         display: block;
         width: 100%;
     }
+
     .calculator-page .subject-table tr,
     .sgpa-table-wrap .subject-table tr {
         background: var(--bg-card2);
         border: 1px solid var(--border);
-        border-radius: 12px;
-        margin-bottom: 10px;
-        padding: 6px 10px;
+        border-radius: 14px;
+        margin-bottom: 14px;
+        padding: 12px;
     }
+
     .calculator-page .subject-table td,
     .sgpa-table-wrap .subject-table td {
-        border-bottom: 0;
+        border-bottom: none;
         padding: 8px 0;
         font-size: 13px;
     }
+
     .calculator-page .subject-table td::before,
     .sgpa-table-wrap .subject-table td::before {
         content: attr(data-label);
         display: block;
-        font-size: 10px;
+        font-size: 11px;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
         color: var(--text-muted);
-        margin-bottom: 3px;
+        margin-bottom: 6px;
     }
+
     .calculator-page .subject-table td[data-label="Action"]::before {
         display: none;
     }
-    .calculator-page .subject-table td[data-label="Subject"] .subject-name-input {
+
+    /* FIXED INPUT SIZES */
+    .calculator-page .subject-table input,
+    .calculator-page .subject-table select {
         width: 100%;
-        min-width: 0;
-        padding-left: 0;
-        padding-right: 0;
+        min-width: 0 !important;
+        max-width: 100%;
     }
-    .calculator-page .subject-table td[data-label="Grade"] .grade-select {
-        min-width: 120px;
+
+    .calculator-page .subject-name-input {
+        width: 100%;
+        min-width: 0 !important;
+        padding: 10px;
+        font-size: 14px;
     }
-    .calculator-page .subject-table td[data-label="Credits"] .credits-input {
-        width: 86px;
+
+    .calculator-page .grade-select {
+        width: 100%;
+        min-width: 0 !important;
+        padding: 10px;
     }
+
+    .calculator-page .credits-input {
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .calculator-page .grade-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 60px;
+    }
+
     .calculator-page .subject-table td[data-label="Action"] {
         text-align: right;
-        padding-top: 2px;
+        padding-top: 6px;
+    }
+
+    .calculator-page .calc-remove-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
     }
 }
 
