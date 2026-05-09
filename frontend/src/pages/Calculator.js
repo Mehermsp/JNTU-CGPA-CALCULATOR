@@ -130,7 +130,7 @@ export default function Calculator() {
   const result = calculateSGPA(subjects);
 
   return (
-    <div>
+    <div className="calculator-page">
       {toast && <Toast msg={toast.msg} type={toast.type} onClose={() => setToast(null)} />}
       <div className="page-header">
         <h1>Grade Calculator</h1>
@@ -154,7 +154,7 @@ export default function Calculator() {
       </div>
 
       <div className="card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+        <div className="calc-semester-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <div>
             <h3 style={{ fontSize: 18 }}>{activeSem} Sem — {SEMESTER_LABELS[activeSem]}</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 4 }}>
@@ -168,11 +168,12 @@ export default function Calculator() {
           </div>
         </div>
 
-        <div style={{ overflowX: 'auto' }}>
-          <table className="subject-table">
+        <div className="table-mobile-hint">Swipe left/right to view all columns</div>
+        <div className="table-scroll calculator-table-scroll">
+          <table className="subject-table calculator-table">
             <thead>
               <tr>
-                <th style={{ width: '40%' }}>Subject</th>
+                <th>Subject</th>
                 <th>Grade</th>
                 <th>Grade Points</th>
                 <th>Credits</th>
@@ -212,7 +213,7 @@ export default function Calculator() {
                       {(gp * sub.credits).toFixed(1)}
                     </td>
                     <td>
-                      <button onClick={() => removeSubject(idx)}
+                      <button className="calc-remove-btn" onClick={() => removeSubject(idx)}
                         style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 16, padding: '4px 8px' }}>
                         ×
                       </button>

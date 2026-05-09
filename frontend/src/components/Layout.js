@@ -164,9 +164,9 @@ export default function Layout() {
                 <div className="top-bar">
                     <button
                         className="hamburger"
-                        onClick={() => setSidebarOpen(true)}
-                        aria-label="Open menu"
-                        style={{ display: "none" }}
+                        onClick={() => setSidebarOpen((prev) => !prev)}
+                        aria-label={sidebarOpen ? "Close menu" : "Open menu"}
+                        aria-expanded={sidebarOpen}
                     >
                         {icons.menu}
                     </button>

@@ -246,7 +246,7 @@ body {
     top: 0;
     left: 0;
     bottom: 0;
-    z-index: 100;
+    z-index: 130;
     transition: transform 0.3s;
     will-change: transform;
 }
@@ -330,10 +330,16 @@ body {
 }
 .hamburger {
     background: none;
-    border: none;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
     color: var(--text);
     cursor: pointer;
     padding: 4px;
+}
+.hamburger svg {
+    width: 20px;
+    height: 20px;
 }
 .page-content {
     padding: 28px 32px;
@@ -490,6 +496,36 @@ body {
 }
 .subject-table tr:hover td {
     background: rgba(255, 255, 255, 0.02);
+}
+.calculator-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+}
+.calculator-table {
+    min-width: 740px;
+}
+.calculator-table th,
+.calculator-table td {
+    white-space: nowrap;
+}
+.calculator-table th:first-child,
+.calculator-table td:first-child {
+    min-width: 240px;
+    white-space: normal;
+}
+.calc-remove-btn {
+    border-radius: 8px;
+}
+.calc-remove-btn:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: var(--danger) !important;
+}
+.table-mobile-hint {
+    display: none;
+    color: var(--text-muted);
+    font-size: 11px;
+    margin-bottom: 8px;
 }
 .subject-name-input {
     background: transparent;
@@ -833,10 +869,10 @@ body {
         display: flex;
     }
     .page-content {
-        padding: 16px 6px;
+        padding: 16px 10px;
     }
     .card {
-        padding: 14px 8px;
+        padding: 14px 12px;
     }
     .sem-row {
         grid-template-columns: 1fr 1fr;
@@ -855,12 +891,84 @@ body {
     }
     .stats-grid {
         grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .calculator-page .sem-tabs {
+        gap: 6px;
+    }
+    .calculator-page .sem-tab {
+        padding: 7px 12px;
+        font-size: 12px;
+    }
+    .calculator-page .calc-semester-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 10px;
+        margin-bottom: 14px !important;
+    }
+    .calculator-page .table-mobile-hint {
+        display: block;
+    }
+    .calculator-page .calculator-table th,
+    .calculator-page .calculator-table td {
+        padding: 10px 10px;
+        font-size: 12px;
+    }
+    .calculator-page .calculator-table th:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 3;
+        background: var(--bg-card);
+    }
+    .calculator-page .calculator-table td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        background: linear-gradient(
+            to right,
+            rgba(26, 26, 46, 1),
+            rgba(26, 26, 46, 0.97)
+        );
+        box-shadow: 8px 0 16px rgba(0, 0, 0, 0.18);
+    }
+    .calculator-page .subject-name-input {
+        min-width: 180px;
+        font-size: 13px;
+        padding: 6px 8px;
+    }
+    .calculator-page .grade-select {
+        min-width: 88px;
+        padding: 7px 8px;
+    }
+    .calculator-page .credits-input {
+        width: 58px;
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+    .calculator-page .grade-badge {
+        padding: 3px 8px;
+        font-size: 11px;
+    }
+    .calculator-page .result-section {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 16px;
+        padding-top: 16px;
+    }
+    .calculator-page .result-value {
+        font-size: 22px;
+    }
+    .calculator-page .actions-row {
+        margin-top: 14px;
+    }
+    .calculator-page .actions-row .btn {
+        width: 100%;
     }
     .form-row {
         grid-template-columns: 1fr;
     }
     .chart-container {
-        height: 180px;
+        height: 200px;
     }
     .auth-card {
         padding: 18px 8px;
@@ -875,9 +983,54 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+    }
+    .dashboard-page .page-header {
+        margin-bottom: 20px;
+    }
+    .dashboard-page .page-header h1 {
+        font-size: 20px;
+    }
+    .dashboard-page .page-header p {
+        font-size: 12px;
+    }
+    .dashboard-page .stat-card {
+        padding: 14px;
+        border-radius: 12px;
+    }
+    .dashboard-page .stat-value {
         font-size: 24px;
+        margin-top: 6px;
+    }
+    .dashboard-page .stat-sub {
+        font-size: 11px;
+    }
+    .dashboard-page .class-awarded-card {
+        padding: 16px;
+    }
+    .dashboard-page .class-awarded-card .class-name {
+        font-size: 20px;
+    }
+    .dashboard-page .dashboard-empty-card {
+        padding: 28px 16px !important;
+    }
+    .dashboard-page .dashboard-trend-card,
+    .dashboard-page .dashboard-summary-card {
+        padding: 14px 12px;
+    }
+    .dashboard-page .sem-row {
+        padding: 12px;
+        border-radius: 12px;
+    }
+    .dashboard-page .sem-row-val {
+        font-size: 18px;
+    }
+    .dashboard-page .backlog-badge,
+    .dashboard-page .no-backlog-badge {
+        font-size: 11px;
+        padding: 3px 8px;
     }
 }
 
@@ -893,6 +1046,9 @@ body {
     }
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+    .dashboard-page .stats-grid {
+        gap: 8px;
     }
     .stat-value {
         font-size: 22px;
@@ -912,6 +1068,18 @@ body {
         left: 6px;
         bottom: 6px;
         padding: 8px 6px;
+    }
+    .dashboard-page .dashboard-empty-card {
+        padding: 22px 12px !important;
+    }
+    .dashboard-page .chart-container {
+        height: 180px;
+    }
+    .calculator-page .result-section {
+        grid-template-columns: 1fr;
+    }
+    .calculator-page .calculator-table {
+        min-width: 700px;
     }
 }
 

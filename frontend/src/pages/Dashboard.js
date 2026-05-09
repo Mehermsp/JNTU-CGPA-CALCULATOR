@@ -38,7 +38,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div>
+    <div className="dashboard-page">
       <div className="page-header">
         <h1>Welcome back, {user?.name?.split(' ')[0]} 👋</h1>
         <p>Here's your academic performance overview</p>
@@ -78,7 +78,7 @@ export default function Dashboard() {
       )}
 
       {sems.length > 0 ? (
-        <div className="card" style={{ marginBottom: 20 }}>
+        <div className="card dashboard-trend-card" style={{ marginBottom: 20 }}>
           <h3 style={{ marginBottom: 4 }}>SGPA Trend</h3>
           <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 16 }}>Your performance across semesters</p>
           <div className="chart-container">
@@ -94,7 +94,7 @@ export default function Dashboard() {
           </div>
         </div>
       ) : (
-        <div className="card" style={{ textAlign: 'center', padding: '48px 24px' }}>
+        <div className="card dashboard-empty-card" style={{ textAlign: 'center', padding: '48px 24px' }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>📊</div>
           <h3>No semesters added yet</h3>
           <p style={{ color: 'var(--text-muted)', margin: '8px 0 20px' }}>Start by adding your semester grades in the Calculator</p>
@@ -105,7 +105,7 @@ export default function Dashboard() {
       )}
 
       {sems.length > 0 && (
-        <div className="card">
+        <div className="card dashboard-summary-card">
           <h3 style={{ marginBottom: 16 }}>Semester Summary</h3>
           <div className="sem-list">
             {sems.map(sem => (
