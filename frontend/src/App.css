@@ -755,9 +755,27 @@ body {
   color: var(--text-hint);
   border-bottom: 1px solid var(--border);
   background: var(--bg-raised);
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  position: static;
+}
+
+/* Ensure no column ever sticks horizontally */
+.subject-table th,
+.subject-table td,
+.calculator-table th,
+.calculator-table td {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  z-index: auto !important;
+  box-shadow: none !important;
+}
+
+.calculator-table th:first-child,
+.calculator-table td:first-child,
+.subject-table th:first-child,
+.subject-table td:first-child {
+  position: static !important;
+  background: transparent !important;
 }
 
 .subject-table td {
@@ -1388,23 +1406,29 @@ select option {
 
   .top-user { display: none; }
 
-  /* Calculator mobile */
+  /* Calculator mobile — full table scrolls, nothing sticks */
   .calculator-page .table-mobile-hint { display: block; }
 
   .calculator-page .calculator-table-scroll {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
   }
 
   .calculator-page .calculator-table {
-    min-width: 720px;
+    min-width: 600px;
   }
 
+  /* Belt-and-suspenders: no cell ever sticks on mobile */
+  .calculator-page .calculator-table th,
+  .calculator-page .calculator-table td,
   .calculator-page .calculator-table th:first-child,
   .calculator-page .calculator-table td:first-child {
     position: static !important;
+    left: auto !important;
     background: transparent !important;
     box-shadow: none !important;
+    z-index: auto !important;
   }
 
   .calculator-page .subject-name-input {
