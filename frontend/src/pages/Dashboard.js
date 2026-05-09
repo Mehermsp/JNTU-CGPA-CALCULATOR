@@ -20,9 +20,8 @@ export default function Dashboard() {
 
   const sems = data?.semesters || [];
   const chartData = sems.map(s => ({
-    name: s.semesterName + ' Sem',
-    SGPA: s.sgpa,
-    fill: '#4f46e5'
+    name: s.semesterName,
+    SGPA: s.sgpa
   }));
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -83,12 +82,12 @@ export default function Dashboard() {
           <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 16 }}>Your performance across semesters</p>
           <div className="chart-container">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} barSize={40}>
+              <BarChart data={chartData} barCategoryGap="20%">
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="name" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="name" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} minTickGap={8} />
                 <YAxis domain={[0, 10]} tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
-                <Bar dataKey="SGPA" fill="#4f46e5" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="SGPA" fill="#4f46e5" maxBarSize={26} radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

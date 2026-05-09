@@ -93,6 +93,7 @@ export default function Layout() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const displayName = user?.name || "";
 
     const handleLogout = () => {
         logout();
@@ -170,11 +171,9 @@ export default function Layout() {
                     >
                         {icons.menu}
                     </button>
-                    <span style={{ fontWeight: 700, fontSize: 16 }}>
-                        JNTU CGPA
-                    </span>
-                    <span style={{ fontSize: 13, color: "var(--text-muted)" }}>
-                        {user?.name}
+                    <span className="top-brand">JNTU CGPA</span>
+                    <span className="top-user" title={displayName}>
+                        {displayName}
                     </span>
                 </div>
                 <div className="page-content">
