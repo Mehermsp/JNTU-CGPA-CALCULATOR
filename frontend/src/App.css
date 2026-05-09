@@ -1133,74 +1133,8 @@ body {
     }
 }
 
-@media (max-width: 640px) {
 
-    .table-scroll,
-    .calculator-table-scroll {
-        width: 100%;
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        border-radius: 12px;
-    }
 
-    .subject-table,
-    .calculator-table {
-        min-width: 720px;
-        border-collapse: collapse;
-    }
-
-    .subject-table thead {
-        display: table-header-group;
-    }
-
-    .subject-table tbody {
-        display: table-row-group;
-    }
-
-    .subject-table tr {
-        display: table-row;
-    }
-
-    .subject-table th,
-    .subject-table td {
-        display: table-cell;
-        white-space: nowrap;
-        vertical-align: middle;
-    }
-
-    .subject-table td::before {
-        display: none !important;
-        content: none !important;
-    }
-
-    .subject-name-input {
-        min-width: 220px;
-    }
-
-    .grade-select {
-        min-width: 90px;
-    }
-
-    .credits-input {
-        width: 70px;
-    }
-}
-
-@media (max-width: 430px) {
-    .top-bar {
-        justify-content: flex-start;
-    }
-    .top-brand {
-        text-align: left;
-    }
-    .top-user {
-        display: none;
-    }
-    .dashboard-page .chart-container {
-        height: 170px;
-    }
-}
 
 /* Overlay for mobile sidebar */
 /* Overlay for mobile sidebar */
