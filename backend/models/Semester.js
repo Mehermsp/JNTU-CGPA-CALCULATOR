@@ -7,7 +7,7 @@ const subjectSchema = new mongoose.Schema({
     enum: ['A+', 'A', 'B', 'C', 'D', 'E', 'F', 'AB', 'O', 'B+', 'Ab', 'NC-C', 'NC-NC'],
     required: true
   },
-  credits: { type: Number, required: true, min: 0, max: 6 },
+  credits: { type: Number, required: true, min: 0, max: 10 },
   isBacklog: { type: Boolean, default: false }
 });
 

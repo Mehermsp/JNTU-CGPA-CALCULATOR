@@ -204,7 +204,7 @@ export default function Calculator() {
                     </td>
                     <td>
                       <input className="credits-input" type="number" value={sub.credits}
-                        min="0" max="6" step="0.5"
+                        min="0" max="10" step="0.5"
                         disabled={isNonCredit}
                         onChange={e => updateSubject(idx, 'credits', e.target.value)} />
                     </td>
