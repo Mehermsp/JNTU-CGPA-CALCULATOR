@@ -1280,3 +1280,30 @@ body {
 select option {
     background: #1a1a2e;
 }
+
+/* FORCE REMOVE STICKY SUBJECT COLUMN */
+@media (max-width: 768px) {
+
+    .calculator-page .calculator-table th:first-child,
+    .calculator-page .calculator-table td:first-child {
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        z-index: auto !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .calculator-page .calculator-table {
+        min-width: 720px;
+    }
+
+    .calculator-page .calculator-table-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .calculator-page .subject-name-input {
+        min-width: 220px;
+    }
+}
