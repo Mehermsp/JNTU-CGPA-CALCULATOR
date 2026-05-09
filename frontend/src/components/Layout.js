@@ -94,6 +94,7 @@ export default function Layout() {
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const displayName = user?.name || "";
+    const shortName = displayName.split(" ")[0] || "";
 
     const handleLogout = () => {
         logout();
@@ -173,7 +174,7 @@ export default function Layout() {
                     </button>
                     <span className="top-brand">JNTU CGPA</span>
                     <span className="top-user" title={displayName}>
-                        {displayName}
+                        {shortName}
                     </span>
                 </div>
                 <div className="page-content">

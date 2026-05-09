@@ -187,32 +187,32 @@ export default function Calculator() {
                 const isNonCredit = isNonCreditGrade(sub.grade);
                 return (
                   <tr key={idx}>
-                    <td>
+                    <td data-label="Subject">
                       <input className="subject-name-input" value={sub.name}
                         onChange={e => updateSubject(idx, 'name', e.target.value)} />
                     </td>
-                    <td>
+                    <td data-label="Grade">
                         <select className="grade-select" value={sub.grade}
                           onChange={e => updateSubject(idx, 'grade', e.target.value)}
                           style={{ color: getGradeColor(sub.grade) }}>
                         {GRADES.map(g => <option key={g} value={g}>{getGradeLabel(g)}</option>)}
                        </select>
                     </td>
-                    <td>
+                    <td data-label="Grade Points">
                       <span className="grade-badge" style={{ color: getGradeColor(sub.grade) }}>
                         {gp}
                       </span>
                     </td>
-                    <td>
+                    <td data-label="Credits">
                       <input className="credits-input" type="number" value={sub.credits}
                         min="0" max="10" step="0.5"
                         disabled={isNonCredit}
                         onChange={e => updateSubject(idx, 'credits', e.target.value)} />
                     </td>
-                    <td style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600 }}>
+                    <td data-label="Weighted" style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600 }}>
                       {(gp * sub.credits).toFixed(1)}
                     </td>
-                    <td>
+                    <td data-label="Action">
                       <button className="calc-remove-btn" onClick={() => removeSubject(idx)}
                         style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 16, padding: '4px 8px' }}>
                         ×

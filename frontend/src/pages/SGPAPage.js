@@ -60,7 +60,7 @@ export default function SGPAPage() {
 
               {expanded === sem.semesterName && (
                 <div style={{ borderTop: '1px solid var(--border)', padding: '16px 24px' }}>
-                  <div className="table-scroll">
+                  <div className="table-scroll sgpa-table-wrap">
                     <table className="subject-table">
                       <thead>
                         <tr>
@@ -76,11 +76,11 @@ export default function SGPAPage() {
                           const gp = getGradePoint(sub.grade);
                           return (
                             <tr key={idx}>
-                              <td>{sub.name}</td>
-                              <td><span className="grade-badge" style={{ color: getGradeColor(sub.grade) }}>{getGradeLabel(sub.grade)}</span></td>
-                              <td style={{ fontWeight: 600 }}>{gp}</td>
-                              <td>{sub.credits}</td>
-                              <td style={{ fontFamily: 'Space Grotesk', fontWeight: 600 }}>
+                              <td data-label="Subject">{sub.name}</td>
+                              <td data-label="Grade"><span className="grade-badge" style={{ color: getGradeColor(sub.grade) }}>{getGradeLabel(sub.grade)}</span></td>
+                              <td data-label="Grade Points" style={{ fontWeight: 600 }}>{gp}</td>
+                              <td data-label="Credits">{sub.credits}</td>
+                              <td data-label="Weighted" style={{ fontFamily: 'Space Grotesk', fontWeight: 600 }}>
                                 {(gp * sub.credits).toFixed(1)}
                               </td>
                             </tr>
