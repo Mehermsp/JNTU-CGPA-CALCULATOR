@@ -195,148 +195,8 @@ body {
     gap: 16px;
 }
 
-/* ====================== MEDIA QUERIES ====================== */
-
-/* Large Desktop */
-@media (min-width: 1400px) {
-    .main-content { padding: 32px 40px; }
-    .sidebar { width: 260px; }
-    .main-content { margin-left: 260px; }
-}
-
-/* Tablet & Small Laptop */
-@media (max-width: 1024px) {
-    .main-content { margin-left: 0; }
-    .sidebar { width: 220px; }
-    .page-content { padding: 24px 16px; }
-}
-
-/* Mobile Landscape / Small Tablet */
-@media (max-width: 768px) {
-    .sidebar {
-        transform: translateX(-100%);
-        width: min(280px, 85vw);
-        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
-    }
-    .sidebar.open { transform: translateX(0); }
-
-    .top-bar { display: flex; }
-    .page-content { padding: 16px 12px; }
-
-    .sem-row {
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        padding: 14px;
-    }
-    .sem-row > div:last-child { display: none; }
-
-    .sgpa-sem-header {
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        padding: 14px;
-    }
-}
-
-/* Small Mobile */
-@media (max-width: 576px) {
-    .auth-container { padding: 12px 8px; }
-    .stats-grid { grid-template-columns: 1fr; }
-    .result-section { grid-template-columns: 1fr; }
-    .chart-container { height: 200px; }
-}
-
-/* Very Small Screens */
-@media (max-width: 480px) {
-    .card { padding: 16px 12px; }
-    .page-header h1 { font-size: 19px; }
-    .subject-name-input { font-size: 13px; }
-    .calculator-table th,
-    .calculator-table td { font-size: 12.5px; }
-}
-
-/* Ultra Small */
-@media (max-width: 360px) {
-    .top-bar { padding: 10px 12px; }
-    .chart-container { height: 180px; }
-}
-
-/* ====================== TABLE MOBILE VIEW ====================== */
-@media (max-width: 640px) {
-    .subject-table thead { display: none; }
-    .subject-table tbody tr {
-        display: block;
-        background: var(--bg-card2);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        margin-bottom: 12px;
-        padding: 8px 12px;
-    }
-    .subject-table td {
-        display: block;
-        width: 100%;
-        border: none;
-        padding: 8px 4px;
-        font-size: 13.5px;
-    }
-    .subject-table td::before {
-        content: attr(data-label);
-        display: block;
-        font-size: 11px;
-        color: var(--text-muted);
-        margin-bottom: 4px;
-        text-transform: uppercase;
-    }
-    .subject-table td[data-label="Action"]::before { display: none; }
-}
-
-/* Toast */
-.toast {
-    position: fixed;
-    bottom: 16px;
-    left: 16px;
-    right: 16px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 18px;
-    font-size: 14px;
-    z-index: 1000;
-    box-shadow: var(--shadow);
-}
-.toast.success { border-color: rgba(16,185,129,0.4); color: var(--success); }
-.toast.error { border-color: rgba(239,68,68,0.4); color: var(--danger); }
-
-/* Utility */
-.btn { min-height: 48px; }
-.grade-select, .credits-input { min-height: 42px; }
-
-select option { background: #1a1a2e; }
-
 /* ====================== DASHBOARD SPECIFIC ====================== */
 
-/* Stats Grid - Better Mobile Layout */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: clamp(12px, 3vw, 16px);
-    margin-bottom: 24px;
-}
-
-/* Force 2 columns on mobile */
-@media (max-width: 768px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 480px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-}
-
-/* Stat Cards */
 .stat-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -376,7 +236,22 @@ select option { background: #1a1a2e; }
     line-height: 1.3;
 }
 
-/* Semester Summary Card */
+/* Class Awarded Card */
+.class-awarded-card {
+    background: linear-gradient(135deg, rgba(79,70,229,0.15), rgba(6,182,212,0.1));
+    border: 1px solid rgba(79,70,229,0.3);
+    border-radius: var(--radius);
+    padding: clamp(20px, 5vw, 24px);
+    margin-bottom: 20px;
+}
+
+.class-awarded-card .class-name {
+    font-size: clamp(20px, 5.5vw, 24px);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+/* Semester Summary */
 .dashboard-summary-card {
     margin-top: 8px;
 }
@@ -428,49 +303,144 @@ select option { background: #1a1a2e; }
     margin-top: 2px;
 }
 
-/* Mobile Adjustments for Semester Row */
-@media (max-width: 640px) {
-    .sem-row {
-        padding: 14px;
-        gap: 10px;
-        border-radius: 12px;
-    }
-    
-    .sem-row-label {
-        font-size: 14.5px;
-    }
-    
-    .sem-row-val {
-        font-size: 18px;
-    }
-}
-
 /* Empty State */
 .dashboard-empty-card {
     text-align: center;
-    padding: clamp(40px, 8vw, 48px) 20px !important;
+    padding: clamp(40px, 8vw, 48px) 20px;
 }
 
 .dashboard-empty-card .btn {
-    min-width: 180px;
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto;
 }
 
 /* Trend Chart */
 .dashboard-trend-card .chart-container {
     margin-top: 12px;
+    height: 280px;
 }
 
-/* Class Awarded Card */
-.class-awarded-card {
-    background: linear-gradient(135deg, rgba(79,70,229,0.15), rgba(6,182,212,0.1));
-    border: 1px solid rgba(79,70,229,0.3);
-    border-radius: var(--radius);
-    padding: clamp(20px, 5vw, 24px);
-    margin-bottom: 20px;
+/* ====================== MEDIA QUERIES ====================== */
+
+/* Large Desktop */
+@media (min-width: 1400px) {
+    .main-content { padding: 32px 40px; }
+    .sidebar { width: 260px; }
+    .main-content { margin-left: 260px; }
 }
 
-.class-awarded-card .class-name {
-    font-size: clamp(20px, 5.5vw, 24px);
-    font-weight: 800;
-    line-height: 1.2;
+/* Tablet & Small Laptop */
+@media (max-width: 1024px) {
+    .main-content { margin-left: 0; }
+    .sidebar { width: 220px; }
+    .page-content { padding: 24px 16px; }
 }
+
+/* Mobile */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: min(280px, 85vw);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+    }
+    .sidebar.open { transform: translateX(0); }
+
+    .top-bar { display: flex; }
+    .page-content { padding: 16px 12px; }
+
+    /* Force 2-column stats on mobile */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .sem-row {
+        padding: 14px;
+        gap: 10px;
+        border-radius: 12px;
+    }
+
+    .sem-row > div:last-child { display: none; }
+
+    .sgpa-sem-header {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .dashboard-trend-card .chart-container {
+        height: 240px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 576px) {
+    .auth-container { padding: 12px 8px; }
+    .result-section { grid-template-columns: 1fr; }
+    .chart-container { height: 200px; }
+}
+
+/* Very Small Screens */
+@media (max-width: 480px) {
+    .card { padding: 16px 12px; }
+    .page-header h1 { font-size: 19px; }
+    .subject-name-input { font-size: 13px; }
+    .calculator-table th,
+    .calculator-table td { font-size: 12.5px; }
+
+    .stats-grid {
+        gap: 10px;
+    }
+}
+
+/* Table Mobile View */
+@media (max-width: 640px) {
+    .subject-table thead { display: none; }
+    .subject-table tbody tr {
+        display: block;
+        background: var(--bg-card2);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin-bottom: 12px;
+        padding: 8px 12px;
+    }
+    .subject-table td {
+        display: block;
+        width: 100%;
+        border: none;
+        padding: 8px 4px;
+        font-size: 13.5px;
+    }
+    .subject-table td::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+    }
+    .subject-table td[data-label="Action"]::before { display: none; }
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 14px;
+    z-index: 1000;
+    box-shadow: var(--shadow);
+}
+.toast.success { border-color: rgba(16,185,129,0.4); color: var(--success); }
+.toast.error { border-color: rgba(239,68,68,0.4); color: var(--danger); }
+
+/* Utility */
+.btn { min-height: 48px; }
+.grade-select, .credits-input { min-height: 42px; }
+select option { background: #1a1a2e; }
