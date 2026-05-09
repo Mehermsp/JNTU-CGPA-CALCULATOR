@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { API } from '../context/AuthContext';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -8,7 +9,9 @@ import {
   JNTUK_R20_SUBJECTS,
   calculateSGPA,
   getGradeColor,
+  getGradeLabel,
   getGradePoint,
+  isNonCreditGrade,
   normalizeGrade
 } from '../utils/grades';
 import { getBranchSemesterSubjects } from '../utils/branchSubjects';
@@ -20,6 +23,7 @@ function Toast({ msg, type, onClose }) {
 
 export default function Calculator() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [activeSem, setActiveSem] = useState('1-1');
   const [subjects, setSubjects] = useState([]);
   const [savedSems, setSavedSems] = useState({});
@@ -29,7 +33,14 @@ export default function Calculator() {
   const showToast = (msg, type = 'success') => setToast({ msg, type });
 
   const normalizeSubjects = (items = []) =>
-    items.map(s => ({ ...s, grade: normalizeGrade(s.grade) }));
+    items.map(s => {
+      const normalizedGrade = normalizeGrade(s.grade);
+      return {
+        ...s,
+        grade: normalizedGrade,
+        credits: isNonCreditGrade(normalizedGrade) ? 0 : (Number(s.credits) || 0)
+      };
+    });
 
   const getDefaultSubjects = useCallback((sem) => {
     const branchDefaults = getBranchSemesterSubjects(user?.branch, sem);
@@ -59,7 +70,20 @@ export default function Calculator() {
   };
 
   const updateSubject = (idx, field, value) => {
-    setSubjects(prev => prev.map((s, i) => i === idx ? { ...s, [field]: field === 'credits' ? parseFloat(value) || 0 : value } : s));
+    setSubjects(prev => prev.map((s, i) => {
+      if (i !== idx) return s;
+      if (field === 'grade') {
+        const normalizedGrade = normalizeGrade(value);
+        if (isNonCreditGrade(normalizedGrade)) {
+          return { ...s, grade: normalizedGrade, credits: 0 };
+        }
+        return { ...s, grade: normalizedGrade };
+      }
+      if (field === 'credits') {
+        return { ...s, credits: parseFloat(value) || 0 };
+      }
+      return { ...s, [field]: value };
+    }));
   };
 
   const addSubject = () => {
@@ -71,6 +95,11 @@ export default function Calculator() {
   };
 
   const saveSemester = async () => {
+    if (!user?.branch) {
+      window.alert('Please select your branch in profile before saving semester details.');
+      navigate('/profile');
+      return;
+    }
     if (subjects.length === 0) return showToast('Add at least one subject', 'error');
     setSaving(true);
     try {
@@ -154,6 +183,7 @@ export default function Calculator() {
             <tbody>
               {subjects.map((sub, idx) => {
                 const gp = getGradePoint(sub.grade);
+                const isNonCredit = isNonCreditGrade(sub.grade);
                 return (
                   <tr key={idx}>
                     <td>
@@ -161,11 +191,11 @@ export default function Calculator() {
                         onChange={e => updateSubject(idx, 'name', e.target.value)} />
                     </td>
                     <td>
-                      <select className="grade-select" value={sub.grade}
-                        onChange={e => updateSubject(idx, 'grade', e.target.value)}
-                        style={{ color: getGradeColor(sub.grade) }}>
-                        {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
-                      </select>
+                        <select className="grade-select" value={sub.grade}
+                          onChange={e => updateSubject(idx, 'grade', e.target.value)}
+                          style={{ color: getGradeColor(sub.grade) }}>
+                        {GRADES.map(g => <option key={g} value={g}>{getGradeLabel(g)}</option>)}
+                       </select>
                     </td>
                     <td>
                       <span className="grade-badge" style={{ color: getGradeColor(sub.grade) }}>
@@ -175,6 +205,7 @@ export default function Calculator() {
                     <td>
                       <input className="credits-input" type="number" value={sub.credits}
                         min="0" max="6" step="0.5"
+                        disabled={isNonCredit}
                         onChange={e => updateSubject(idx, 'credits', e.target.value)} />
                     </td>
                     <td style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600 }}>
@@ -233,9 +264,9 @@ export default function Calculator() {
       <div className="card" style={{ marginTop: 20 }}>
         <h3 style={{ marginBottom: 16 }}>JNTUK R20 Grade Reference</h3>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-          {[['A+', 10, '>= 90'], ['A', 9, '80-89'], ['B', 8, '70-79'], ['C', 7, '60-69'], ['D', 6, '50-59'], ['E', 5, '40-49'], ['F', 0, '< 40'], ['AB', 0, 'Absent']].map(([g, gp, range]) => (
+          {[['A+', 10, '>= 90'], ['A', 9, '80-89'], ['B', 8, '70-79'], ['C', 7, '60-69'], ['D', 6, '50-59'], ['E', 5, '40-49'], ['F', 0, '< 40'], ['AB', 0, 'Absent'], ['NC-C', 0, 'Completed'], ['NC-NC', 0, 'Not Completed']].map(([g, gp, range]) => (
             <div key={g} style={{ background: 'var(--bg-card2)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 16px', textAlign: 'center', minWidth: 80 }}>
-              <div style={{ fontWeight: 800, fontSize: 18, color: getGradeColor(g) }}>{g}</div>
+              <div style={{ fontWeight: 800, fontSize: 18, color: getGradeColor(g) }}>{getGradeLabel(g)}</div>
               <div style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: 14 }}>{gp}</div>
               <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{range}</div>
             </div>

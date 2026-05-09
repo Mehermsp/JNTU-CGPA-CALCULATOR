@@ -12,15 +12,33 @@ const GRADE_POINTS = {
   'D': 6,
   'E': 5,
   'F': 0,
-  'AB': 0
+  'AB': 0,
+  'NC-C': 0,
+  'NC-NC': 0
 };
+
+const NON_CREDIT_GRADES = ['NC-C', 'NC-NC'];
 
 const normalizeGrade = (grade) => {
   const token = String(grade || '').trim().toUpperCase();
   if (token === 'AB') return 'AB';
   if (token === 'O') return 'A+';
   if (token === 'B+') return 'C';
+  if (token === 'COMPLETED' || token === 'NC-C') return 'NC-C';
+  if (token === 'NOT COMPLETED' || token === 'NOT_COMPLETED' || token === 'NC-NC') return 'NC-NC';
   return token;
+};
+
+const sanitizeSubjects = (subjects = []) => {
+  return subjects.map((subject) => {
+    const normalizedGrade = normalizeGrade(subject.grade);
+    const isNonCredit = NON_CREDIT_GRADES.includes(normalizedGrade);
+    return {
+      ...subject,
+      grade: normalizedGrade,
+      credits: isNonCredit ? 0 : (Number(subject.credits) || 0)
+    };
+  });
 };
 
 const SEMESTER_ORDER = ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2', '4-1', '4-2'];
@@ -33,7 +51,7 @@ const calculateSemesterMetrics = (subjects = []) => {
   subjects.forEach(subject => {
     const normalizedGrade = normalizeGrade(subject.grade);
     const gradePoint = GRADE_POINTS[normalizedGrade] || 0;
-    const credits = Number(subject.credits) || 0;
+    const credits = NON_CREDIT_GRADES.includes(normalizedGrade) ? 0 : (Number(subject.credits) || 0);
 
     totalWeightedPoints += gradePoint * credits;
     totalCredits += credits;
@@ -140,16 +158,17 @@ router.post('/', auth, async (req, res) => {
     if (!semesterName || !subjects) {
       return res.status(400).json({ error: 'semesterName and subjects are required' });
     }
+    const sanitizedSubjects = sanitizeSubjects(subjects);
 
     let semester = await Semester.findOne({ userId: req.userId, semesterName });
 
     if (semester) {
-      semester.subjects = subjects;
+      semester.subjects = sanitizedSubjects;
       await semester.save();
       return res.json(semester);
     }
 
-    semester = new Semester({ userId: req.userId, semesterName, subjects });
+    semester = new Semester({ userId: req.userId, semesterName, subjects: sanitizedSubjects });
     await semester.save();
     res.status(201).json(semester);
   } catch (err) {

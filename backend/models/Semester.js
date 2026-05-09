@@ -4,7 +4,7 @@ const subjectSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   grade: {
     type: String,
-    enum: ['A+', 'A', 'B', 'C', 'D', 'E', 'F', 'AB', 'O', 'B+', 'Ab'],
+    enum: ['A+', 'A', 'B', 'C', 'D', 'E', 'F', 'AB', 'O', 'B+', 'Ab', 'NC-C', 'NC-NC'],
     required: true
   },
   credits: { type: Number, required: true, min: 0, max: 6 },
@@ -36,14 +36,20 @@ const GRADE_POINTS = {
   'D': 6,
   'E': 5,
   'F': 0,
-  'AB': 0
+  'AB': 0,
+  'NC-C': 0,
+  'NC-NC': 0
 };
+
+const NON_CREDIT_GRADES = ['NC-C', 'NC-NC'];
 
 const normalizeGrade = (grade) => {
   const token = String(grade || '').trim().toUpperCase();
   if (token === 'AB') return 'AB';
   if (token === 'O') return 'A+';
   if (token === 'B+') return 'C';
+  if (token === 'COMPLETED' || token === 'NC-C') return 'NC-C';
+  if (token === 'NOT COMPLETED' || token === 'NOT_COMPLETED' || token === 'NC-NC') return 'NC-NC';
   return token;
 };
 
@@ -58,7 +64,10 @@ semesterSchema.pre('save', function(next) {
     this.subjects.forEach(subject => {
       const normalizedGrade = normalizeGrade(subject.grade);
       const gradePoint = GRADE_POINTS[normalizedGrade] || 0;
-      const credits = Number(subject.credits) || 0;
+      const credits = NON_CREDIT_GRADES.includes(normalizedGrade) ? 0 : (Number(subject.credits) || 0);
+      if (NON_CREDIT_GRADES.includes(normalizedGrade)) {
+        subject.credits = 0;
+      }
 
       if (normalizedGrade === 'F' || normalizedGrade === 'AB') {
         subject.isBacklog = true;

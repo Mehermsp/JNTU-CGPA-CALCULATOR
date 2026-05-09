@@ -7,10 +7,26 @@ export const GRADE_POINTS = {
     E: 5,
     F: 0,
     AB: 0,
+    "NC-C": 0,
+    "NC-NC": 0,
 };
 
-export const GRADES = ["A+", "A", "B", "C", "D", "E", "F", "AB"];
+export const GRADES = ["A+", "A", "B", "C", "D", "E", "F", "AB", "NC-C", "NC-NC"];
 export const BACKLOG_GRADES = ["F", "AB"];
+export const NON_CREDIT_GRADES = ["NC-C", "NC-NC"];
+
+export const GRADE_LABELS = {
+    "A+": "A+",
+    A: "A",
+    B: "B",
+    C: "C",
+    D: "D",
+    E: "E",
+    F: "F",
+    AB: "AB",
+    "NC-C": "Completed (Non-credit)",
+    "NC-NC": "Not Completed (Non-credit)",
+};
 
 export const SEMESTER_LIST = [
     "1-1",
@@ -100,7 +116,7 @@ export const JNTUK_R20_SUBJECTS = {
         { name: "Industrial/Research Internship", credits: 3 },
     ],
     "4-2": [
-        { name: "Project Work", credits: 6 },
+        { name: "Project Work", credits: 8 },
         { name: "Seminar", credits: 2 },
         { name: "Comprehensive Viva Voce", credits: 2 },
     ],
@@ -179,6 +195,8 @@ export const getGradeColor = (grade) => {
         E: "#f97316",
         F: "#ef4444",
         AB: "#6b7280",
+        "NC-C": "#22c55e",
+        "NC-NC": "#94a3b8",
     };
     return colors[normalized] || "#6b7280";
 };
@@ -188,6 +206,8 @@ export const normalizeGrade = (grade) => {
     if (token === "AB") return "AB";
     if (token === "O") return "A+";
     if (token === "B+") return "C";
+    if (token === "COMPLETED" || token === "NC-C") return "NC-C";
+    if (token === "NOT COMPLETED" || token === "NOT_COMPLETED" || token === "NC-NC") return "NC-NC";
     return token;
 };
 
@@ -196,6 +216,14 @@ export const getGradePoint = (grade) =>
 
 export const isBacklogGrade = (grade) =>
     BACKLOG_GRADES.includes(normalizeGrade(grade));
+
+export const isNonCreditGrade = (grade) =>
+    NON_CREDIT_GRADES.includes(normalizeGrade(grade));
+
+export const getGradeLabel = (grade) => {
+    const normalized = normalizeGrade(grade);
+    return GRADE_LABELS[normalized] || normalized;
+};
 
 export const getGPColor = (gp) => {
     if (gp >= 9) return "#10b981";

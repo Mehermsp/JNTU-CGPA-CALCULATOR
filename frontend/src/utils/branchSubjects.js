@@ -541,7 +541,8 @@ const canonicalizeBranch = (branch = "") => {
 };
 
 const LAB_PATTERN = /(?:\blab\b|laboratory|workshop|practice|studio|tools|drafting|modeling)/i;
-const PROJECT_PATTERN = /major project|project work|project/i;
+const MAJOR_PROJECT_PATTERN = /major project|project work/i;
+const PROJECT_PATTERN = /project/i;
 const INTERNSHIP_PATTERN = /internship/i;
 const SEMINAR_PATTERN = /seminar|viva/i;
 const VALUE_ADD_PATTERN = /(?:skill|constitution|environment|ethics|human values|traditional knowledge|research methodology|ipr|soft skills|employability)/i;
@@ -549,6 +550,7 @@ const VALUE_ADD_PATTERN = /(?:skill|constitution|environment|ethics|human values
 const estimateCredits = (subjectName = "") => {
   const name = String(subjectName || "").trim();
   if (!name) return 3;
+  if (MAJOR_PROJECT_PATTERN.test(name)) return 8;
   if (PROJECT_PATTERN.test(name)) return 6;
   if (INTERNSHIP_PATTERN.test(name)) return 2;
   if (SEMINAR_PATTERN.test(name)) return 2;
@@ -565,4 +567,3 @@ export const getBranchSemesterSubjects = (branch, semester) => {
   const subjectNames = BRANCH_SUBJECTS_BY_LABEL[canonicalBranch]?.[semesterLabel] || [];
   return subjectNames.map((name) => ({ name, credits: estimateCredits(name) }));
 };
-

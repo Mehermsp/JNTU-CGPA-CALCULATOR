@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API } from '../context/AuthContext';
-import { SEMESTER_LABELS, getGradeColor, getGPColor, getGradePoint } from '../utils/grades';
+import { SEMESTER_LABELS, getGradeColor, getGPColor, getGradeLabel, getGradePoint } from '../utils/grades';
 
 export default function SGPAPage() {
   const [data, setData] = useState(null);
@@ -77,7 +77,7 @@ export default function SGPAPage() {
                           return (
                             <tr key={idx}>
                               <td>{sub.name}</td>
-                              <td><span className="grade-badge" style={{ color: getGradeColor(sub.grade) }}>{sub.grade}</span></td>
+                              <td><span className="grade-badge" style={{ color: getGradeColor(sub.grade) }}>{getGradeLabel(sub.grade)}</span></td>
                               <td style={{ fontWeight: 600 }}>{gp}</td>
                               <td>{sub.credits}</td>
                               <td style={{ fontFamily: 'Space Grotesk', fontWeight: 600 }}>
