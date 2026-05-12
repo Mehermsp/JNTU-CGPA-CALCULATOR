@@ -1,6 +1,3 @@
-// utils/brevo.js
-const axios = require("axios");
-
 const BREVO_API_KEY = process.env.BREVO_API_KEY;
 const BREVO_SENDER = process.env.BREVO_SENDER_EMAIL || "no-reply@example.com";
 
@@ -31,22 +28,27 @@ async function sendOtpEmail(to, otp, purpose = "verification") {
         </div>
     `;
 
-    return axios.post(
-        "https://api.brevo.com/v3/smtp/email",
-        {
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+            "api-key": BREVO_API_KEY,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
             sender: { email: BREVO_SENDER, name: "JNTU CGPA" },
             to: [{ email: to }],
             subject,
             textContent: text,
             htmlContent: html,
-        },
-        {
-            headers: {
-                "api-key": BREVO_API_KEY,
-                "Content-Type": "application/json",
-            },
-        }
-    );
+        }),
+    });
+
+    if (!response.ok) {
+        const details = await response.text();
+        throw new Error(`Brevo API error (${response.status}): ${details}`);
+    }
+
+    return response.json();
 }
 
 module.exports = { sendOtpEmail };
