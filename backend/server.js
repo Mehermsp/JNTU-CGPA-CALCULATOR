@@ -36,16 +36,20 @@ mongoose
     .then(() => {
         console.log("MongoDB connected");
         const PORT = process.env.PORT || 5000;
-        // Serve frontend static files
-        const buildPath = path.join(__dirname, "../frontend/build");
-        app.use(express.static(buildPath));
 
-        // Fallback: serve index.html for any non-API route (for React Router)
-        app.get("*", (req, res) => {
-            if (req.path.startsWith("/api/"))
-                return res.status(404).json({ error: "API route not found" });
-            res.sendFile(path.join(buildPath, "index.html"));
-        });
+        // Serve frontend only if build exists (for local/dev use)
+        const fs = require("fs");
+        const buildPath = path.join(__dirname, "../frontend/build");
+        if (fs.existsSync(path.join(buildPath, "index.html"))) {
+            app.use(express.static(buildPath));
+            app.get("*", (req, res) => {
+                if (req.path.startsWith("/api/"))
+                    return res
+                        .status(404)
+                        .json({ error: "API route not found" });
+                res.sendFile(path.join(buildPath, "index.html"));
+            });
+        }
 
         app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     })
