@@ -20,13 +20,14 @@ router.post("/register", async (req, res) => {
     try {
         const { name, email, password, rollNumber, branch, regulation } =
             req.body;
+        const normalizedEmail = (email || "").trim().toLowerCase();
         if (!name || !email || !password) {
             return res
                 .status(400)
                 .json({ error: "Name, email, and password are required" });
         }
 
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email: normalizedEmail });
         if (existingUser) {
             return res.status(400).json({ error: "Email already registered" });
         }
@@ -36,7 +37,7 @@ router.post("/register", async (req, res) => {
 
         const user = new User({
             name,
-            email,
+            email: normalizedEmail,
             password,
             rollNumber,
             branch,
@@ -47,7 +48,7 @@ router.post("/register", async (req, res) => {
         });
 
         await user.save();
-        await sendOtpEmail(email, otp, "registration");
+        await sendOtpEmail(normalizedEmail, otp, "registration");
 
         res.status(201).json({
             message:
@@ -62,7 +63,9 @@ router.post("/register", async (req, res) => {
 router.post("/verify-otp", async (req, res) => {
     try {
         const { email, otp } = req.body;
-        const user = await User.findOne({ email });
+        const normalizedEmail = (email || "").trim().toLowerCase();
+        const normalizedOtp = String(otp || "").trim();
+        const user = await User.findOne({ email: normalizedEmail });
 
         if (!user) return res.status(400).json({ error: "User not found" });
         if (user.isVerified) {
@@ -71,7 +74,7 @@ router.post("/verify-otp", async (req, res) => {
 
         if (
             !user.otp ||
-            user.otp !== otp ||
+            user.otp !== normalizedOtp ||
             !user.otpExpires ||
             user.otpExpires < new Date()
         ) {
@@ -94,7 +97,8 @@ router.post("/verify-otp", async (req, res) => {
 router.post("/resend-otp", async (req, res) => {
     try {
         const { email } = req.body;
-        const user = await User.findOne({ email });
+        const normalizedEmail = (email || "").trim().toLowerCase();
+        const user = await User.findOne({ email: normalizedEmail });
 
         if (!user) return res.status(400).json({ error: "User not found" });
         if (user.isVerified) {
@@ -106,7 +110,7 @@ router.post("/resend-otp", async (req, res) => {
         user.otpExpires = new Date(Date.now() + OTP_EXPIRY_MS);
         await user.save();
 
-        await sendOtpEmail(email, otp, "registration");
+        await sendOtpEmail(normalizedEmail, otp, "registration");
         res.json({ message: "OTP resent to email." });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -117,13 +121,14 @@ router.post("/resend-otp", async (req, res) => {
 router.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
+        const normalizedEmail = (email || "").trim().toLowerCase();
         if (!email || !password) {
             return res
                 .status(400)
                 .json({ error: "Email and password are required" });
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: normalizedEmail });
         if (!user) return res.status(400).json({ error: "Invalid credentials" });
 
         const isMatch = await user.comparePassword(password);
@@ -142,7 +147,8 @@ router.post("/login", async (req, res) => {
 router.post("/forgot-password", async (req, res) => {
     try {
         const { email } = req.body;
-        const user = await User.findOne({ email });
+        const normalizedEmail = (email || "").trim().toLowerCase();
+        const user = await User.findOne({ email: normalizedEmail });
 
         if (!user) return res.status(400).json({ error: "User not found" });
 
@@ -151,7 +157,7 @@ router.post("/forgot-password", async (req, res) => {
         user.resetPasswordOtpExpires = new Date(Date.now() + OTP_EXPIRY_MS);
         await user.save();
 
-        await sendOtpEmail(email, otp, "reset");
+        await sendOtpEmail(normalizedEmail, otp, "reset");
         res.json({ message: "OTP sent to email for password reset." });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -162,13 +168,15 @@ router.post("/forgot-password", async (req, res) => {
 router.post("/verify-reset-otp", async (req, res) => {
     try {
         const { email, otp } = req.body;
-        const user = await User.findOne({ email });
+        const normalizedEmail = (email || "").trim().toLowerCase();
+        const normalizedOtp = String(otp || "").trim();
+        const user = await User.findOne({ email: normalizedEmail });
 
         if (!user) return res.status(400).json({ error: "User not found" });
 
         if (
             !user.resetPasswordOtp ||
-            user.resetPasswordOtp !== otp ||
+            user.resetPasswordOtp !== normalizedOtp ||
             !user.resetPasswordOtpExpires ||
             user.resetPasswordOtpExpires < new Date()
         ) {
@@ -185,7 +193,8 @@ router.post("/verify-reset-otp", async (req, res) => {
 router.post("/resend-reset-otp", async (req, res) => {
     try {
         const { email } = req.body;
-        const user = await User.findOne({ email });
+        const normalizedEmail = (email || "").trim().toLowerCase();
+        const user = await User.findOne({ email: normalizedEmail });
 
         if (!user) return res.status(400).json({ error: "User not found" });
 
@@ -194,7 +203,7 @@ router.post("/resend-reset-otp", async (req, res) => {
         user.resetPasswordOtpExpires = new Date(Date.now() + OTP_EXPIRY_MS);
         await user.save();
 
-        await sendOtpEmail(email, otp, "reset");
+        await sendOtpEmail(normalizedEmail, otp, "reset");
         res.json({ message: "OTP resent to email for password reset." });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -205,13 +214,15 @@ router.post("/resend-reset-otp", async (req, res) => {
 router.post("/reset-password", async (req, res) => {
     try {
         const { email, newPassword, otp } = req.body;
-        const user = await User.findOne({ email });
+        const normalizedEmail = (email || "").trim().toLowerCase();
+        const normalizedOtp = String(otp || "").trim();
+        const user = await User.findOne({ email: normalizedEmail });
 
         if (!user) return res.status(400).json({ error: "User not found" });
 
         if (
             !user.resetPasswordOtp ||
-            user.resetPasswordOtp !== otp ||
+            user.resetPasswordOtp !== normalizedOtp ||
             !user.resetPasswordOtpExpires ||
             user.resetPasswordOtpExpires < new Date()
         ) {

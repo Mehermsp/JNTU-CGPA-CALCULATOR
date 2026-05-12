@@ -33,7 +33,11 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        const res = await API.post("/auth/login", { email, password });
+        const normalizedEmail = (email || "").trim().toLowerCase();
+        const res = await API.post("/auth/login", {
+            email: normalizedEmail,
+            password,
+        });
         localStorage.setItem("jntu_token", res.data.token);
         setUser(res.data.user);
         return res.data;
@@ -41,20 +45,32 @@ export const AuthProvider = ({ children }) => {
 
     // Registration with OTP
     const register = async (data) => {
+        const payload = {
+            ...data,
+            email: (data?.email || "").trim().toLowerCase(),
+        };
         // Step 1: send registration data, expect OTP sent
-        const res = await API.post("/auth/register", data);
+        const res = await API.post("/auth/register", payload);
         return res.data; // { message }
     };
 
     const verifyRegisterOtp = async (email, otp) => {
-        const res = await API.post("/auth/verify-otp", { email, otp });
+        const normalizedEmail = (email || "").trim().toLowerCase();
+        const normalizedOtp = String(otp || "").trim();
+        const res = await API.post("/auth/verify-otp", {
+            email: normalizedEmail,
+            otp: normalizedOtp,
+        });
         localStorage.setItem("jntu_token", res.data.token);
         setUser(res.data.user);
         return res.data;
     };
 
     const resendRegisterOtp = async (email) => {
-        const res = await API.post("/auth/resend-otp", { email });
+        const normalizedEmail = (email || "").trim().toLowerCase();
+        const res = await API.post("/auth/resend-otp", {
+            email: normalizedEmail,
+        });
         return res.data;
     };
 
@@ -76,6 +92,8 @@ export const AuthProvider = ({ children }) => {
                 loading,
                 login,
                 register,
+                verifyRegisterOtp,
+                resendRegisterOtp,
                 logout,
                 updateProfile,
                 API,
