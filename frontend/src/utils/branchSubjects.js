@@ -546,6 +546,7 @@ const PROJECT_PATTERN = /project/i;
 const INTERNSHIP_PATTERN = /internship/i;
 const SEMINAR_PATTERN = /seminar|viva/i;
 const VALUE_ADD_PATTERN = /(?:skill|constitution|environment|ethics|human values|traditional knowledge|research methodology|ipr|soft skills|employability)/i;
+const COMPUTER_ENGINEERING_WORKSHOP_PATTERN = /computer engineering workshop/i;
 
 const estimateCredits = (subjectName = "") => {
   const name = String(subjectName || "").trim();
@@ -556,6 +557,7 @@ const estimateCredits = (subjectName = "") => {
   if (SEMINAR_PATTERN.test(name)) return 2;
   if (LAB_PATTERN.test(name)) return 1.5;
   if (VALUE_ADD_PATTERN.test(name)) return 2;
+  if (COMPUTER_ENGINEERING_WORKSHOP_PATTERN.test(name)) return 3;
   return 3;
 };
 
