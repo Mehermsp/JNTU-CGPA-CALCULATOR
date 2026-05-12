@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -33,7 +33,7 @@ const PublicRoute = ({ children }) => {
 function App() {
     return (
         <AuthProvider>
-            <BrowserRouter>
+            <HashRouter>
                 <Routes>
                     <Route
                         path="/login"
@@ -74,8 +74,9 @@ function App() {
                         <Route path="cgpa" element={<CGPAPage />} />
                         <Route path="profile" element={<Profile />} />
                     </Route>
+                    <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
-            </BrowserRouter>
+            </HashRouter>
         </AuthProvider>
     );
 }

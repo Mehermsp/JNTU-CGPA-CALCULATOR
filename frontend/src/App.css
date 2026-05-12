@@ -355,6 +355,16 @@ body {
   cursor: pointer;
 }
 .auth-switch a:hover { text-decoration: underline; }
+.auth-link-btn {
+  border: 0;
+  background: transparent;
+  color: #a5b4fc;
+  font: inherit;
+  font-weight: 500;
+  padding: 0;
+  cursor: pointer;
+}
+.auth-link-btn:hover { text-decoration: underline; }
 
 .error-msg {
   display: flex;

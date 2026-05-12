@@ -223,7 +223,13 @@ export default function Register() {
                     )}
                     <div className="auth-switch">
                         Already have an account?{" "}
-                        <a onClick={() => navigate("/login")}>Sign in</a>
+                        <button
+                            type="button"
+                            className="auth-link-btn"
+                            onClick={() => navigate("/login")}
+                        >
+                            Sign in
+                        </button>
                     </div>
                 </div>
                 <SiteFooter compact />
